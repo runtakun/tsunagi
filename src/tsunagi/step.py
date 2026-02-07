@@ -15,12 +15,14 @@ from __future__ import annotations
 import asyncio
 import functools
 import inspect
-from collections.abc import Awaitable, Callable
-from typing import Any, TypeVar, overload
+from typing import TYPE_CHECKING, Any, TypeVar, overload
 
 from tsunagi.errors import StepError
 from tsunagi.errors import TimeoutError as TsunagiTimeoutError
 from tsunagi.retry import NO_RETRY, RetryConfig
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
 
 T = TypeVar("T")
 

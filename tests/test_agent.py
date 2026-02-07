@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+from typing import TYPE_CHECKING
 
 import pytest
 
 from tsunagi import Agent, AgentEvent, ToolCall, tool
-from tsunagi.agent import Message
+
+if TYPE_CHECKING:
+    from tsunagi.agent import Message
 
 
 class TextAdapter:

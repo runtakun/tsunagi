@@ -15,13 +15,16 @@ CRITICAL DESIGN DECISIONS:
 from __future__ import annotations
 
 import json
-from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from typing import Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from tsunagi.context import Context
-from tsunagi.tool import Tool
 from tsunagi.tracer import NullTracer, Tracer
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from tsunagi.tool import Tool
 
 
 @dataclass
@@ -248,10 +251,7 @@ class Agent:
                     await self._tracer.on_step_start(ctx, tc.name, tc.arguments)
                     try:
                         result = await tool_obj(**tc.arguments)
-                        if isinstance(result, str):
-                            result_str = result
-                        else:
-                            result_str = json.dumps(result)
+                        result_str = result if isinstance(result, str) else json.dumps(result)
                         await self._tracer.on_step_end(ctx, tc.name, result_str)
                     except Exception as e:  # pragma: no cover - exercised in tests
                         result_str = json.dumps({"error": str(e)})

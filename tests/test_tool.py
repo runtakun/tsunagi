@@ -55,4 +55,4 @@ def test_tool_requires_async() -> None:
         return "nope"
 
     with pytest.raises(TypeError):
-        tool(sync_tool)
+        tool(sync_tool)  # type: ignore[arg-type]

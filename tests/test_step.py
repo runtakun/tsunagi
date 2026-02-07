@@ -28,7 +28,7 @@ def test_step_requires_async() -> None:
         return x
 
     with pytest.raises(TypeError):
-        step(not_async)  # type: ignore[arg-type]
+        step(not_async)
 
 
 @pytest.mark.asyncio

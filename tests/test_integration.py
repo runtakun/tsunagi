@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from tsunagi import Pipeline
 from tests.conftest import add_one, double, to_string
+from tsunagi import Pipeline
 
 
 @pytest.mark.asyncio

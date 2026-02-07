@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from tsunagi import NullTracer, Pipeline, PipelineError
 from tests.conftest import add_one, always_fail, double, to_string
+from tsunagi import NullTracer, Pipeline, PipelineError
 
 
 class MockTracer:

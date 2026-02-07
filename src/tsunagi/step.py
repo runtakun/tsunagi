@@ -15,7 +15,8 @@ from __future__ import annotations
 import asyncio
 import functools
 import inspect
-from typing import Any, Awaitable, Callable, TypeVar, overload
+from collections.abc import Awaitable, Callable
+from typing import Any, TypeVar, overload
 
 from tsunagi.errors import StepError
 from tsunagi.errors import TimeoutError as TsunagiTimeoutError
@@ -81,7 +82,7 @@ class Step:
                     result = await self.fn(*args, **kwargs)
                 return result
 
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 raise TsunagiTimeoutError(self.name, self.timeout_seconds) from None
 
             except Exception as e:

@@ -7,8 +7,8 @@ Retry is configured per-step, not globally. SDK exceptions propagate directly
 from __future__ import annotations
 
 import random
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Callable
 
 
 @dataclass(frozen=True)

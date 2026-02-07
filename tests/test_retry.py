@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from tsunagi import NO_RETRY, RetryConfig
 from tests import conftest
 from tests.conftest import fail_twice_then_succeed
+from tsunagi import NO_RETRY, RetryConfig
 
 
 def test_no_retry_default() -> None:

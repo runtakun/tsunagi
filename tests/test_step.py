@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from tsunagi import StepError, StepSequence, step
 from tests.conftest import add_one, always_fail, double, to_string
+from tsunagi import StepError, StepSequence, step
 
 
 @pytest.mark.asyncio

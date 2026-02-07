@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import json
+from typing import TYPE_CHECKING, Any
 
 import pytest
 
 from tsunagi import Agent, AgentEvent, ToolCall, tool
-from tsunagi.agent import Message
+
+if TYPE_CHECKING:
+    from tsunagi.agent import Message
 
 
 class TextAdapter:
@@ -88,7 +91,9 @@ async def test_agent_unknown_tool() -> None:
     assert result == "final"
 
     tool_result_message = adapter.seen_messages[-1][-1]
-    content = tool_result_message.content[0]["content"]
+    assert isinstance(tool_result_message.content, list)
+    content_list: list[dict[str, Any]] = tool_result_message.content
+    content = content_list[0]["content"]
     assert "Unknown tool" in content
 
 
@@ -101,7 +106,7 @@ async def test_agent_stream() -> None:
     agent = Agent(adapter)
     agent.register(adder)
 
-    events = [event async for event in agent.stream("calc")]  # type: ignore[misc]
+    events = [event async for event in agent.stream("calc")]
 
     assert events[0] == AgentEvent(
         type="tool_call", tool="adder", args={"a": 1, "b": 2}

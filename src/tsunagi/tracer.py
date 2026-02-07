@@ -7,9 +7,10 @@ Custom tracers implement the Tracer protocol — no base class inheritance requi
 from __future__ import annotations
 
 import sys
-from typing import Any, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
-from tsunagi.context import Context
+if TYPE_CHECKING:
+    from tsunagi.context import Context
 
 
 @runtime_checkable

@@ -8,7 +8,10 @@ to auto-generate the tool schema sent to the LLM.
 from __future__ import annotations
 
 import inspect
-from typing import Any, Awaitable, Callable, get_type_hints
+from typing import TYPE_CHECKING, Any, get_type_hints
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
 
 
 class Tool:

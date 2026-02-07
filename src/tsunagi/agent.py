@@ -16,11 +16,15 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from typing import Any, AsyncIterator, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from tsunagi.context import Context
-from tsunagi.tool import Tool
 from tsunagi.tracer import NullTracer, Tracer
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from tsunagi.tool import Tool
 
 
 @dataclass
@@ -88,9 +92,10 @@ class AnthropicAdapter:
 
     def _get_client(self) -> Any:
         if self._client is None:
-            from anthropic import AsyncAnthropic
+            import importlib
 
-            self._client = AsyncAnthropic(**self.client_kwargs)
+            anthropic = importlib.import_module("anthropic")
+            self._client = anthropic.AsyncAnthropic(**self.client_kwargs)
         return self._client
 
     async def send(
@@ -148,9 +153,10 @@ class OpenAIAdapter:
 
     def _get_client(self) -> Any:
         if self._client is None:
-            from openai import AsyncOpenAI
+            import importlib
 
-            self._client = AsyncOpenAI(**self.client_kwargs)
+            openai_module = importlib.import_module("openai")
+            self._client = openai_module.AsyncOpenAI(**self.client_kwargs)
         return self._client
 
     async def send(
@@ -247,10 +253,7 @@ class Agent:
                     await self._tracer.on_step_start(ctx, tc.name, tc.arguments)
                     try:
                         result = await tool_obj(**tc.arguments)
-                        if isinstance(result, str):
-                            result_str = result
-                        else:
-                            result_str = json.dumps(result)
+                        result_str = result if isinstance(result, str) else json.dumps(result)
                         await self._tracer.on_step_end(ctx, tc.name, result_str)
                     except Exception as e:  # pragma: no cover - exercised in tests
                         result_str = json.dumps({"error": str(e)})

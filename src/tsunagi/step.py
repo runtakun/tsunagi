@@ -15,11 +15,14 @@ from __future__ import annotations
 import asyncio
 import functools
 import inspect
-from typing import Any, Awaitable, Callable, TypeVar, overload
+from typing import TYPE_CHECKING, Any, TypeVar, overload
 
 from tsunagi.errors import StepError
 from tsunagi.errors import TimeoutError as TsunagiTimeoutError
 from tsunagi.retry import NO_RETRY, RetryConfig
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
 
 T = TypeVar("T")
 
@@ -70,19 +73,23 @@ class Step:
         """
         last_error: Exception | None = None
 
+        timeout_seconds = self.timeout_seconds
+
         for attempt in range(self.retry.max_attempts):
             try:
-                if self.timeout_seconds is not None:
+                if timeout_seconds is not None:
                     result = await asyncio.wait_for(
                         self.fn(*args, **kwargs),
-                        timeout=self.timeout_seconds,
+                        timeout=timeout_seconds,
                     )
                 else:
                     result = await self.fn(*args, **kwargs)
                 return result
 
-            except asyncio.TimeoutError:
-                raise TsunagiTimeoutError(self.name, self.timeout_seconds) from None
+            except TimeoutError:
+                if timeout_seconds is None:
+                    raise
+                raise TsunagiTimeoutError(self.name, timeout_seconds) from None
 
             except Exception as e:
                 last_error = e
@@ -150,7 +157,7 @@ class BoundStep(Step):
         try:
             return await self._original.execute(*args)
         finally:
-            self._original.fn = original_fn  # type: ignore[assignment]
+            self._original.fn = original_fn
 
 
 class StepSequence:

@@ -142,7 +142,7 @@ class Pipeline:
             step_inputs = [input] * len(steps)
 
         try:
-            tasks = [s.execute(inp) for s, inp in zip(steps, step_inputs)]
+            tasks = [s.execute(inp) for s, inp in zip(steps, step_inputs, strict=True)]
             return list(await asyncio.gather(*tasks))
         except Exception as e:  # pragma: no cover - handled in pipeline tests
             raise PipelineError("parallel", e) from e

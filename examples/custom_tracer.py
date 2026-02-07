@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from tsunagi import Pipeline, Tracer, step
+from tsunagi import Pipeline, step
 
 
 class JSONLTracer:

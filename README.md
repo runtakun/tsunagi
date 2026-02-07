@@ -5,10 +5,26 @@ as plain user code while adding composition, retry, timeout, and tracing.
 
 ## Installation
 
+Install as a standard library (from PyPI or a local checkout):
+
 ```bash
-pip install -e .
-# or with dev tools
+pip install tsunagi
+# or include optional extras, e.g. tracing
+pip install "tsunagi[otel]"
+```
+
+Using [uv](https://docs.astral.sh/uv/) for dependency management:
+
+```bash
+uv add tsunagi
+uv add "tsunagi[otel]"
+```
+
+For local development with extras:
+
+```bash
 pip install -e .[dev]
+uv pip install -e .[dev]
 ```
 
 ## Quick Start

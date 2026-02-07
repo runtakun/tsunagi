@@ -92,9 +92,11 @@ class AnthropicAdapter:
 
     def _get_client(self) -> Any:
         if self._client is None:
-            from anthropic import AsyncAnthropic
+            import importlib
 
-            self._client = AsyncAnthropic(**self.client_kwargs)
+            anthropic = importlib.import_module("anthropic")
+            async_anthropic_cls = getattr(anthropic, "AsyncAnthropic")
+            self._client = async_anthropic_cls(**self.client_kwargs)
         return self._client
 
     async def send(
@@ -152,9 +154,11 @@ class OpenAIAdapter:
 
     def _get_client(self) -> Any:
         if self._client is None:
-            from openai import AsyncOpenAI
+            import importlib
 
-            self._client = AsyncOpenAI(**self.client_kwargs)
+            openai_module = importlib.import_module("openai")
+            async_openai_cls = getattr(openai_module, "AsyncOpenAI")
+            self._client = async_openai_cls(**self.client_kwargs)
         return self._client
 
     async def send(

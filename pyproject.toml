@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
 ]
-authors = [{ name = "Hiroyuki Shigeta", email = "shigeta@glgl.org" }]
+authors = [{ name = "Hiroyuki Shigeta" }]
 
 [project.urls]
 Homepage = "https://github.com/runtakun/tsunagi"
